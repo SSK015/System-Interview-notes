@@ -12,6 +12,8 @@ In computing, a process is the instance of a computer program that is being exec
 
 #### 进程的组成
 
+
+
 In general, a computer system process consists of (or is said to own) the following resources:
 
 - An image of the executable machine code associated with a program.
@@ -62,3 +64,4 @@ While a computer program is a passive collection of instructions typically store
 ## Reference: 
 
 - https://zh.wikipedia.org/wiki/%E8%A1%8C%E7%A8%8B
+- https://www.prepbytes.com/blog/operating-system/difference-between-process-and-thread/
