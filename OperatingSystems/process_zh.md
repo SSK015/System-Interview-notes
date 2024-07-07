@@ -12,7 +12,7 @@ In computing, a process is the instance of a computer program that is being exec
 
 #### 进程的组成
 
-
+![image-20240707143120319](../assets/process_zh/image-20240707143120319.png)
 
 In general, a computer system process consists of (or is said to own) the following resources:
 
