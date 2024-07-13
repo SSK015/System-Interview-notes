@@ -22,11 +22,13 @@ In general, a computer system process consists of (or is said to own) the follow
 - Security attributes, such as the process owner and the process' set of permissions (allowable operations).
 - Processor state (context), such as the content of registers and physical memory addressing. The state is typically stored in computer registers when the process is executing, and in memory otherwise.[1]
 
+#### Process State
+
+![image-20240713224913547](../assets/process_zh/image-20240713224913547.png)
+
 ### 线程定义：
 
 In computer science, a thread of execution is the smallest sequence of programmed instructions that can be managed independently by a scheduler, which is typically a part of the operating system. In many cases, a thread is a component of a process.
-
-
 
 ![image-20240707151323474](../assets/process_zh/image-20240707151323474.png)
 
@@ -39,45 +41,15 @@ In computer science, a thread of execution is the smallest sequence of programme
 - Priority can be assigned to the threads just like the process, and the highest priority thread is scheduled first.
 - Each thread has its own Thread Control Block (TCB). Like the process, a context switch occurs for the thread, and register contents are saved in (TCB). As threads share the same address space and resources, synchronization is also required for the various activities of the thread.
 
-#### 【Linux Case Study】为什么说，在Linux内核看来进程和线程是没有区别的？
-
-linux内核调度中没有process和thread的概念，调度的基本单位是结构体task_struct。
-
-`task_struct`
-
-```cpp
-	pid_t pid; // thread id
-	pid_t tgid; // process id
-	void *stack; // kernel stack
-```
-
-```cpp
-union thread_union {
-	 #ifndef CONFIG_ARCH_TASK_STRUCT_ON_STACK
-          struct task_struct task;
-     #endif
-     #ifndef CONFIG_THREAD_INFO_IN_TASK
-          struct thread_info thread_info;
-     #endif
-          unsigned long stack[THREAD_SIZE/sizeof(long)];
-  };
-```
-
-#### 【Linux Case Study】Linux Kernel Scheduler
-
-
-
-【Linux Case Study】Linux Process State
-
-
-
-【Linux Case Study】Linux Kernel State
-
-
-
 Linux 内核选择线程作为调度单位主要是为了提高系统的并行性和效率。线程作为比进程更轻量级的调度单元，能够更好地利用多核处理器，提高系统性能，同时减少上下文切换的开销和资源管理的复杂性。这使得多线程编程成为实现高性能并发程序的有效方式。
 
 #### User-Level Thread和Kernel Thread的差别
+
+User Level Threads: 用户态编程框架自己定义，同一个kernel thread起的user thread在内核调度的视角中是不可见的。切换User Thread时，由于不需要kernel trap，因而上下文切换开销小。
+
+![image-20240713223535874](../assets/process_zh/image-20240713223535874.png)
+
+![image-20240713223556158](../assets/process_zh/image-20240713223556158.png)
 
 #### 进程和程序的区别
 
@@ -109,3 +81,4 @@ While a computer program is a passive collection of instructions typically store
 - https://www.prepbytes.com/blog/operating-system/difference-between-process-and-thread/
 - [process - What are the relations between processes, kernel threads, lightweight processes and user threads in Unix? - Unix & Linux Stack Exchange](https://unix.stackexchange.com/questions/472324/what-are-the-relations-between-processes-kernel-threads-lightweight-processes)
 - [task_struct简要分析 (kerneltravel.net)](https://www.kerneltravel.net/blog/2020/task_struct_zjqing/)
+- [Difference between User Level thread and Kernel Level thread - GeeksforGeeks](https://www.geeksforgeeks.org/difference-between-user-level-thread-and-kernel-level-thread/)
