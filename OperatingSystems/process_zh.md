@@ -26,16 +26,58 @@ In general, a computer system process consists of (or is said to own) the follow
 
 In computer science, a thread of execution is the smallest sequence of programmed instructions that can be managed independently by a scheduler, which is typically a part of the operating system. In many cases, a thread is a component of a process.
 
+
+
+![image-20240707151323474](../assets/process_zh/image-20240707151323474.png)
+
 #### 为什么有了进程还需要线程呢？
+
+进程负责资源管理 + 执行。如果把这两个部分分离，可以有更好的性能。线程主要负责执行。
 
 - Threads run in parallel improving the application performance. Each such thread has its own CPU state and stack, but they share the address space of the process and the environment. 
 - Threads can share common data so they do not need to use inter-process communication. Like the processes, threads also have states like ready, executing, blocked, etc. 
 - Priority can be assigned to the threads just like the process, and the highest priority thread is scheduled first.
 - Each thread has its own Thread Control Block (TCB). Like the process, a context switch occurs for the thread, and register contents are saved in (TCB). As threads share the same address space and resources, synchronization is also required for the various activities of the thread.
 
-#### 为什么说，在Linux内核看来进程和线程是没有区别的？
+#### 【Linux Case Study】为什么说，在Linux内核看来进程和线程是没有区别的？
+
+linux内核调度中没有process和thread的概念，调度的基本单位是结构体task_struct。
+
+`task_struct`
+
+```cpp
+	pid_t pid; // thread id
+	pid_t tgid; // process id
+	void *stack; // kernel stack
+```
+
+```cpp
+union thread_union {
+	 #ifndef CONFIG_ARCH_TASK_STRUCT_ON_STACK
+          struct task_struct task;
+     #endif
+     #ifndef CONFIG_THREAD_INFO_IN_TASK
+          struct thread_info thread_info;
+     #endif
+          unsigned long stack[THREAD_SIZE/sizeof(long)];
+  };
+```
+
+#### 【Linux Case Study】Linux Kernel Scheduler
+
+
+
+【Linux Case Study】Linux Process State
+
+
+
+【Linux Case Study】Linux Kernel State
+
+
 
 Linux 内核选择线程作为调度单位主要是为了提高系统的并行性和效率。线程作为比进程更轻量级的调度单元，能够更好地利用多核处理器，提高系统性能，同时减少上下文切换的开销和资源管理的复杂性。这使得多线程编程成为实现高性能并发程序的有效方式。
+
+#### User-Level Thread和Kernel Thread的差别
 
 #### 进程和程序的区别
 
@@ -65,3 +107,5 @@ While a computer program is a passive collection of instructions typically store
 
 - https://zh.wikipedia.org/wiki/%E8%A1%8C%E7%A8%8B
 - https://www.prepbytes.com/blog/operating-system/difference-between-process-and-thread/
+- [process - What are the relations between processes, kernel threads, lightweight processes and user threads in Unix? - Unix & Linux Stack Exchange](https://unix.stackexchange.com/questions/472324/what-are-the-relations-between-processes-kernel-threads-lightweight-processes)
+- [task_struct简要分析 (kerneltravel.net)](https://www.kerneltravel.net/blog/2020/task_struct_zjqing/)
